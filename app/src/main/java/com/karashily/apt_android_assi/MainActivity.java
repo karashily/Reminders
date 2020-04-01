@@ -8,7 +8,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements CustomDialog.CustomDialogListener {
     ListView remindersList;
@@ -18,8 +21,15 @@ public class MainActivity extends AppCompatActivity implements CustomDialog.Cust
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminders);
 
-        remindersList = (ListView) findViewById(R.id.reminders_list);
+        ArrayList<Reminder> reminders = new ArrayList<>();
+        reminders.add(new Reminder(0, "Get Milk", 0));
+        reminders.add(new Reminder(1, "Study Arch", 1));
+        reminders.add(new Reminder(2, "Make the Assignment", 1));
 
+
+        remindersList = (ListView) findViewById(R.id.reminders_list);
+        RemindersAdapter remindersAdapter = new RemindersAdapter(this, reminders);
+        remindersList.setAdapter(remindersAdapter);
     }
 
     @Override

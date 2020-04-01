@@ -12,7 +12,6 @@
         android:layout_height="match_parent"
         android:id="@+id/reminders_list"
         tools:listitem="@layout/reminders_row"
-        android:dividerHeight="3dp"
         />
 
 </LinearLayout>
