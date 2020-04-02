@@ -80,6 +80,9 @@ public class CustomDialog extends AppCompatDialogFragment {
         cancelButton.setText(negativeButtonText);
         commitButton.setText(postiveButtonText);
 
+
+        final AlertDialog dialog = builder.create();
+
         commitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,17 +93,17 @@ public class CustomDialog extends AppCompatDialogFragment {
                     mReminder.setImportant(0);
                 }
                 listener.onCommit(type, mReminder);
+                dialog.dismiss();
             }
         });
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                dialog.dismiss();
             }
         });
-
-        return builder.create();
+        return dialog;
     }
 
     public interface CustomDialogListener {

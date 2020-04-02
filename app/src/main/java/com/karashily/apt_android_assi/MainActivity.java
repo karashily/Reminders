@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -104,19 +105,24 @@ public class MainActivity extends AppCompatActivity implements CustomDialog.Cust
 
         ListView dialogList = view.findViewById(R.id.dialog_list);
         dialogList.setAdapter(dialogListAdapter);
+
+        builder.setView(view);
+        final AlertDialog dialog = builder.create();
+
         dialogList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(position == 0) {
                     openEditDialog(reminders.get(itemPosition));
+                    dialog.dismiss();
                 } else if(position == 1) {
                     // TODO: delete the reminder at itemPosition
+                    dialog.dismiss();
                 }
             }
         });
 
-        builder.setView(view);
-        builder.create().show();
+        dialog.show();
 
     }
 }
