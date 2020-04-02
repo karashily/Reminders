@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -61,7 +62,19 @@ public class MainActivity extends AppCompatActivity implements CustomDialog.Cust
                 openNewDialog();
                 return true;
             case R.id.exit:
-                android.os.Process.killProcess(android.os.Process.myPid());
+                new AlertDialog.Builder(this)
+                        .setTitle("Exiting App")
+                        .setMessage("Are you sure you want to exit the app?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                android.os.Process.killProcess(android.os.Process.myPid());
+                            }
+
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
