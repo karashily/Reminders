@@ -16,12 +16,14 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements CustomDialog.CustomDialogListener {
     ListView remindersList;
 
+    RemindersDbAdapter reminder;
+    ArrayList<Reminder> reminders = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminders);
 
-        ArrayList<Reminder> reminders = new ArrayList<>();
+
         reminders.add(new Reminder(0, "Get Milk", 0));
         reminders.add(new Reminder(1, "Study Arch", 1));
         reminders.add(new Reminder(2, "Make the Assignment", 1));
@@ -30,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements CustomDialog.Cust
         remindersList = (ListView) findViewById(R.id.reminders_list);
         RemindersAdapter remindersAdapter = new RemindersAdapter(this, reminders);
         remindersList.setAdapter(remindersAdapter);
+
+        reminder = new RemindersDbAdapter(this);
     }
 
     @Override
@@ -62,6 +66,8 @@ public class MainActivity extends AppCompatActivity implements CustomDialog.Cust
     @Override
     public void onCommit(String reminderText, boolean isImportant) {
         // TODO: Add the new reminder
+
+        reminder.createReminder(reminderText,isImportant);
     }
 
     @Override
