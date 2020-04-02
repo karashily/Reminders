@@ -3,12 +3,10 @@ package com.karashily.apt_android_assi;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -16,7 +14,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements CustomDialog.CustomDialogListener {
     ListView remindersList;
 
-    RemindersDbAdapter reminder;
+    RemindersDbAdapter dbAdapter;
     ArrayList<Reminder> reminders = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements CustomDialog.Cust
         RemindersAdapter remindersAdapter = new RemindersAdapter(this, reminders);
         remindersList.setAdapter(remindersAdapter);
 
-        reminder = new RemindersDbAdapter(this);
+        dbAdapter = new RemindersDbAdapter(this);
     }
 
     @Override
@@ -64,13 +62,8 @@ public class MainActivity extends AppCompatActivity implements CustomDialog.Cust
     }
 
     @Override
-    public void onCommit(String reminderText, boolean isImportant) {
-        // TODO: Add the new reminder
-
-        reminder.createReminder(reminderText,isImportant);
-    }
-
-    @Override
-    public void onDelete() {
+    public void onCommit(String reminderText, int isImportant) {
+        dbAdapter.createReminder(reminderText,isImportant);
+        reminders.add(new Reminder(0, reminderText, isImportant));
     }
 }

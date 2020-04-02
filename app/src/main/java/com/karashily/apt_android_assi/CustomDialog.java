@@ -16,7 +16,7 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 public class CustomDialog extends AppCompatDialogFragment {
     private EditText reminderTextEditText;
     private CheckBox isImportantCheckBox;
-    private Button deleteButton;
+    private Button cancelButton;
     private Button commitButton;
     private TextView dialogTitleTextView;
 
@@ -59,27 +59,33 @@ public class CustomDialog extends AppCompatDialogFragment {
 
         reminderTextEditText = view.findViewById(R.id.reminder_text);
         isImportantCheckBox = view.findViewById(R.id.is_important);
-        deleteButton = view.findViewById(R.id.delete_button);
+        cancelButton = view.findViewById(R.id.cancel_button);
         commitButton = view.findViewById(R.id.commit_button);
         dialogTitleTextView = view.findViewById(R.id.dialog_title);
 
         dialogTitleTextView.setText(dialogTitle);
         reminderTextEditText.setText(reminderText);
         isImportantCheckBox.setChecked(isImportant);
-        deleteButton.setText(negativeButtonText);
+        cancelButton.setText(negativeButtonText);
         commitButton.setText(postiveButtonText);
 
         commitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onCommit(reminderText, isImportant);
+                int status;
+                if(isImportant) {
+                    status = 1;
+                } else {
+                    status = 0;
+                }
+                listener.onCommit(reminderText, status);
             }
         });
 
-        deleteButton.setOnClickListener(new View.OnClickListener() {
+        cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onDelete();
+
             }
         });
 
@@ -87,7 +93,6 @@ public class CustomDialog extends AppCompatDialogFragment {
     }
 
     public interface CustomDialogListener {
-        void onCommit(String reminderText, boolean isImportant);
-        void onDelete();
+        void onCommit(String reminderText, int isImportant);
     }
 }
