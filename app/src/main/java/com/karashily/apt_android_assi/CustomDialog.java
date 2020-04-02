@@ -21,20 +21,27 @@ public class CustomDialog extends AppCompatDialogFragment {
     private TextView dialogTitleTextView;
 
     private String dialogTitle;
-    private String reminderText;
-    private boolean isImportant;
     private String negativeButtonText;
     private String postiveButtonText;
+    private String type;
+    private Reminder mReminder;
 
     private CustomDialogListener listener;
 
-    public CustomDialog(String dialogTitle, String reminderText, boolean isImportant, String negativeButtonText, String postiveButtonText) {
+    public CustomDialog(Reminder reminder) {
         super();
-        this.dialogTitle = dialogTitle;
-        this.reminderText = reminderText;
-        this.isImportant = isImportant;
-        this.negativeButtonText = negativeButtonText;
-        this.postiveButtonText = postiveButtonText;
+        if(reminder == null) {
+            mReminder = new Reminder(-1, "", 0);
+            this.dialogTitle = "New Reminder";
+            this.postiveButtonText = "ADD";
+            this.type = "New";
+        } else {
+            mReminder = reminder;
+            this.dialogTitle = "Edit Reminder";
+            this.postiveButtonText = "Edit";
+            this.type = "Edit";
+        }
+        this.negativeButtonText = "Cancel";
     }
 
     @Override
@@ -64,21 +71,25 @@ public class CustomDialog extends AppCompatDialogFragment {
         dialogTitleTextView = view.findViewById(R.id.dialog_title);
 
         dialogTitleTextView.setText(dialogTitle);
-        reminderTextEditText.setText(reminderText);
-        isImportantCheckBox.setChecked(isImportant);
+        reminderTextEditText.setText(mReminder.getContent());
+        if(mReminder.getImportant() == 1) {
+            isImportantCheckBox.setChecked(true);
+        } else {
+            isImportantCheckBox.setChecked(false);
+        }
         cancelButton.setText(negativeButtonText);
         commitButton.setText(postiveButtonText);
 
         commitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int status;
-                if(isImportant) {
-                    status = 1;
+                mReminder.setContent(reminderTextEditText.getText().toString());
+                if(isImportantCheckBox.isChecked()) {
+                    mReminder.setImportant(1);
                 } else {
-                    status = 0;
+                    mReminder.setImportant(0);
                 }
-                listener.onCommit(reminderText, status);
+                listener.onCommit(type, mReminder);
             }
         });
 
@@ -93,6 +104,6 @@ public class CustomDialog extends AppCompatDialogFragment {
     }
 
     public interface CustomDialogListener {
-        void onCommit(String reminderText, int isImportant);
+        void onCommit(String type, Reminder reminder);
     }
 }
