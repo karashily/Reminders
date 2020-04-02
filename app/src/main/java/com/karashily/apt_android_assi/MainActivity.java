@@ -66,8 +66,7 @@ public class MainActivity extends AppCompatActivity implements CustomDialog.Cust
     @Override
     public void onCommit(String reminderText, boolean isImportant) {
         // TODO: Add the new reminder
-
-        reminder.createReminder(reminderText,isImportant);
+        reminder.createReminder(reminderText, isImportant);
     }
 
     @Override
