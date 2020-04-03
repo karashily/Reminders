@@ -19,36 +19,36 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements CustomDialog.CustomDialogListener {
-    ListView remindersList;
+    ListView mRemindersList;
     // create the cursor
-    Cursor res;
+    Cursor mCursor;
     // create adapter to connect with the database
-    RemindersDbAdapter dbAdapter;
+    RemindersDbAdapter mDbAdapter;
     // create Cursor adapter to refresh data automatically when Add, Update, Delete.
-    RemindersSimpleCursorAdapter remindersSimpleCursorAdapter;
+    RemindersSimpleCursorAdapter mRemindersAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // initialize the adapter
-        dbAdapter = new RemindersDbAdapter(this);
+        mDbAdapter = new RemindersDbAdapter(this);
         // this function will get any writable database to connect on it to be able to write or read from it.
-        dbAdapter.open();
+        mDbAdapter.open();
         // will initialize the cursor adapter with
         // 1- the context => this
         // 2- the layout which will write the data on it => reminders_row
         // 3- array contain the columns name where i must read my data respectively.
         //4- array contains things will hold the data from the cursor respectively text, color.
-        remindersSimpleCursorAdapter = new RemindersSimpleCursorAdapter(this,
-                R.layout.reminders_row, res, new String[]{RemindersDbAdapter.COL_CONTENT,
+        mRemindersAdapter = new RemindersSimpleCursorAdapter(this,
+                R.layout.reminders_row, mCursor, new String[]{RemindersDbAdapter.COL_CONTENT,
                 RemindersDbAdapter.COL_IMPORTANT}, new int[]{R.id.text, R.id.color}, 0);
         setContentView(R.layout.activity_reminders);
 
         updateReminders();
 
-        remindersList = (ListView) findViewById(R.id.reminders_list);
-        remindersList.setAdapter(remindersSimpleCursorAdapter);
-        remindersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mRemindersList = (ListView) findViewById(R.id.reminders_list);
+        mRemindersList.setAdapter(mRemindersAdapter);
+        mRemindersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 onClick(position);
@@ -60,8 +60,8 @@ public class MainActivity extends AppCompatActivity implements CustomDialog.Cust
     // here we fetch the data from the database and save them back in the cursor
     // change the old cursor with the new one i got from fetchAllReminders
     private void updateReminders() {
-        res = dbAdapter.fetchAllReminders();
-        remindersSimpleCursorAdapter.changeCursor(res);
+        mCursor = mDbAdapter.fetchAllReminders();
+        mRemindersAdapter.changeCursor(mCursor);
     }
 
     public void showMessage(String title, String Message) {
@@ -119,13 +119,13 @@ public class MainActivity extends AppCompatActivity implements CustomDialog.Cust
     public void onCommit(String type, Reminder reminder) {
         if (type.equals("Edit")) {
             // here we can update the database
-            dbAdapter.updateReminder(reminder);
+            mDbAdapter.updateReminder(reminder);
             // then change the cursor to refresh the layout with the new data.
             updateReminders();
         } else {
             if (!reminder.getContent().equals("")) {
                 // here we can create a new record in the database
-                dbAdapter.createReminder(reminder.getContent(), reminder.getImportant());
+                mDbAdapter.createReminder(reminder.getContent(), reminder.getImportant());
                 // then change the cursor to refresh the layout with the new data.
                 updateReminders();
             }
@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements CustomDialog.Cust
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // get the current cursor on the list which point to the first element on the database
-                Cursor c = ((RemindersSimpleCursorAdapter) remindersList.getAdapter()).getCursor();
+                Cursor c = ((RemindersSimpleCursorAdapter) mRemindersList.getAdapter()).getCursor();
                 // move it to the position where the user touch to get a life data from the database to be able to
                 // update it or delete it.
                 c.moveToPosition(itemPosition);
@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements CustomDialog.Cust
                     openEditDialog(new Reminder(c.getInt(0), c.getString(1), c.getInt(2)));
                     dialog.dismiss();
                 } else if (position == 1) {
-                    dbAdapter.deleteReminderById(c.getInt(0));
+                    mDbAdapter.deleteReminderById(c.getInt(0));
                     // then change the cursor to refresh the layout with the new data.
                     updateReminders();
                     dialog.dismiss();
