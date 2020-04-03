@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/text"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/holo_red_dark"
         android:textSize="20sp"
         android:layout_margin="16dp"
         android:text="Reminder Text should show here"/>

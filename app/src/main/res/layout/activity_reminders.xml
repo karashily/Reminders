@@ -12,6 +12,7 @@
         android:layout_height="match_parent"
         android:id="@+id/reminders_list"
         tools:listitem="@layout/reminders_row"
+        android:background="@mipmap/background"
         />
 
 </LinearLayout>
