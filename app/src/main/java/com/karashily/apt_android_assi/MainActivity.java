@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -22,11 +21,12 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements CustomDialog.CustomDialogListener {
     ListView remindersList;
     // create the cursor
-    Cursor res ;
+    Cursor res;
     // create adapter to connect with the database
     RemindersDbAdapter dbAdapter;
     // create Cursor adapter to refresh data automatically when Add, Update, Delete.
     RemindersSimpleCursorAdapter remindersSimpleCursorAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,10 +39,12 @@ public class MainActivity extends AppCompatActivity implements CustomDialog.Cust
         // 2- the layout which will write the data on it => reminders_row
         // 3- array contain the columns name where i must read my data respectively.
         //4- array contains things will hold the data from the cursor respectively text, color.
-        remindersSimpleCursorAdapter = new RemindersSimpleCursorAdapter(this,R.layout.reminders_row,res,new String []{RemindersDbAdapter.COL_CONTENT,RemindersDbAdapter.COL_IMPORTANT},new int []{R.id.text,R.id.color},0);
+        remindersSimpleCursorAdapter = new RemindersSimpleCursorAdapter(this,
+                R.layout.reminders_row, res, new String[]{RemindersDbAdapter.COL_CONTENT,
+                RemindersDbAdapter.COL_IMPORTANT}, new int[]{R.id.text, R.id.color}, 0);
         setContentView(R.layout.activity_reminders);
 
-        importantCalls();
+        updateReminders();
 
         remindersList = (ListView) findViewById(R.id.reminders_list);
         remindersList.setAdapter(remindersSimpleCursorAdapter);
@@ -53,17 +55,16 @@ public class MainActivity extends AppCompatActivity implements CustomDialog.Cust
             }
         });
 
-
     }
 
     // here we fetch the data from the database and save them back in the cursor
     // change the old cursor with the new one i got from fetchAllReminders
-    private void importantCalls ()
-    {
+    private void updateReminders() {
         res = dbAdapter.fetchAllReminders();
         remindersSimpleCursorAdapter.changeCursor(res);
     }
-    public void showMessage(String title,String Message){
+
+    public void showMessage(String title, String Message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(true);
         builder.setTitle(title);
@@ -86,10 +87,9 @@ public class MainActivity extends AppCompatActivity implements CustomDialog.Cust
                 return true;
             case R.id.exit:
                 new AlertDialog.Builder(this)
-                        .setTitle("Exiting App")
+                        .setTitle("Exit")
                         .setMessage("Are you sure you want to exit the app?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener()
-                        {
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 android.os.Process.killProcess(android.os.Process.myPid());
@@ -117,17 +117,17 @@ public class MainActivity extends AppCompatActivity implements CustomDialog.Cust
 
     @Override
     public void onCommit(String type, Reminder reminder) {
-        if(type.equals("Edit")) {
+        if (type.equals("Edit")) {
             // here we can update the database
             dbAdapter.updateReminder(reminder);
             // then change the cursor to refresh the layout with the new data.
-            importantCalls();
+            updateReminders();
         } else {
-            if(!reminder.getContent().equals("")) {
+            if (!reminder.getContent().equals("")) {
                 // here we can create a new record in the database
                 dbAdapter.createReminder(reminder.getContent(), reminder.getImportant());
                 // then change the cursor to refresh the layout with the new data.
-                importantCalls();
+                updateReminders();
             }
         }
 
@@ -142,7 +142,8 @@ public class MainActivity extends AppCompatActivity implements CustomDialog.Cust
         ArrayList<String> dialogListOptions = new ArrayList<>();
         dialogListOptions.add("Edit Reminder");
         dialogListOptions.add("Delete Reminder");
-        ArrayAdapter<String> dialogListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, dialogListOptions);
+        ArrayAdapter<String> dialogListAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, dialogListOptions);
 
         ListView dialogList = view.findViewById(R.id.dialog_list);
         dialogList.setAdapter(dialogListAdapter);
@@ -158,14 +159,13 @@ public class MainActivity extends AppCompatActivity implements CustomDialog.Cust
                 // move it to the position where the user touch to get a life data from the database to be able to
                 // update it or delete it.
                 c.moveToPosition(itemPosition);
-                if(position == 0) {
-                    openEditDialog(new Reminder(c.getInt(0),c.getString(1),c.getInt(2)));
+                if (position == 0) {
+                    openEditDialog(new Reminder(c.getInt(0), c.getString(1), c.getInt(2)));
                     dialog.dismiss();
-                } else if(position == 1) {
-                    // TODO: delete the reminder at itemPosition
+                } else if (position == 1) {
                     dbAdapter.deleteReminderById(c.getInt(0));
                     // then change the cursor to refresh the layout with the new data.
-                    importantCalls();
+                    updateReminders();
                     dialog.dismiss();
                 }
             }

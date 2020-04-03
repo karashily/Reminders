@@ -20,28 +20,30 @@ public class RemindersDbAdapter {
     public static final int INDEX_IMPORTANT = INDEX_ID + 2;
     //used for logging
     private static final String TAG = "RemindersDbAdapter";
-    private DatabaseHelper mDbHelper;
-    private SQLiteDatabase mDb;
     private static final String DATABASE_NAME = "dba_remdrs";
     private static final String TABLE_NAME = "tbl_remdrs";
     private static final int DATABASE_VERSION = 1;
-    private final Context mCtx;
     //SQL statement used to create the database
     private static final String DATABASE_CREATE =
             "CREATE TABLE if not exists " + TABLE_NAME + " ( " +
                     COL_ID + " INTEGER PRIMARY KEY autoincrement, " +
                     COL_CONTENT + " TEXT, " +
                     COL_IMPORTANT + " INTEGER );";
+    private final Context mCtx;
+    private DatabaseHelper mDbHelper;
+    private SQLiteDatabase mDb;
 
 
     public RemindersDbAdapter(Context ctx) {
         this.mCtx = ctx;
     }
+
     //open
     public void open() throws SQLException {
         mDbHelper = new DatabaseHelper(mCtx);
         mDb = mDbHelper.getWritableDatabase();
     }
+
     //close
     public void close() {
         if (mDbHelper != null) {
@@ -52,35 +54,36 @@ public class RemindersDbAdapter {
 
     //TODO implement the function createReminder() which take the name as the content of the dbAdapter and boolean important...note that the id will be created for you automatically
     public void createReminder(String name, int important) {
-      ContentValues contentValues = new ContentValues();
-      contentValues.put(COL_CONTENT,name);
-      contentValues.put(COL_IMPORTANT,important);
-      long result = mDb.insert(TABLE_NAME,null ,contentValues);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_CONTENT, name);
+        contentValues.put(COL_IMPORTANT, important);
+        long result = mDb.insert(TABLE_NAME, null, contentValues);
     }
+
     //TODO overloaded to take a dbAdapter
     public long createReminder(Reminder reminder) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_CONTENT,reminder.getContent());
-        contentValues.put(COL_IMPORTANT,reminder.getImportant());
-        long result = mDb.insert(TABLE_NAME,null ,contentValues);
+        contentValues.put(COL_CONTENT, reminder.getContent());
+        contentValues.put(COL_IMPORTANT, reminder.getImportant());
+        long result = mDb.insert(TABLE_NAME, null, contentValues);
         return result;
     }
 
     //TODO implement the function fetchReminderById() to get a certain dbAdapter given its id
     public Reminder fetchReminderById(int id) {
-        Cursor  res = mDb.rawQuery("select * from "+TABLE_NAME+"where _id =?"+String.valueOf(id),null);
+        Cursor res = mDb.rawQuery("select * from " + TABLE_NAME + "where _id =?" + String.valueOf(id), null);
         res.moveToFirst();
         int returnedId = res.getInt(0);
         String comment = res.getString(1);
         int status = res.getInt(2);
-        Reminder reminder = new Reminder(returnedId,comment,status);
+        Reminder reminder = new Reminder(returnedId, comment, status);
         return reminder;
     }
 
 
     //TODO implement the function fetchAllReminders() which get all reminders
     public Cursor fetchAllReminders() {
-        Cursor res = mDb.rawQuery("select * from "+TABLE_NAME,null);
+        Cursor res = mDb.rawQuery("select * from " + TABLE_NAME, null);
         return res;
 
     }
@@ -88,18 +91,19 @@ public class RemindersDbAdapter {
     //TODO implement the function updateReminder() to update a certain dbAdapter
     public void updateReminder(Reminder reminder) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_CONTENT,reminder.getContent());
-        contentValues.put(COL_IMPORTANT,reminder.getImportant());
-        mDb.update(TABLE_NAME, contentValues, "_id = ?",new String[] { String.valueOf(reminder.getId()) });
+        contentValues.put(COL_CONTENT, reminder.getContent());
+        contentValues.put(COL_IMPORTANT, reminder.getImportant());
+        mDb.update(TABLE_NAME, contentValues, "_id = ?", new String[]{String.valueOf(reminder.getId())});
     }
+
     //TODO implement the function deleteReminderById() to delete a certain dbAdapter given its id
     public void deleteReminderById(int nId) {
-        mDb.delete(TABLE_NAME, "_id = ?",new String[] {String.valueOf(nId)});
+        mDb.delete(TABLE_NAME, "_id = ?", new String[]{String.valueOf(nId)});
     }
 
     //TODO implement the function deleteAllReminders() to delete all reminders
     public void deleteAllReminders() {
-        mDb.execSQL("delete from "+ TABLE_NAME);
+        mDb.execSQL("delete from " + TABLE_NAME);
     }
 
 

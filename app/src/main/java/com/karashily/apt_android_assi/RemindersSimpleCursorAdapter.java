@@ -28,12 +28,9 @@ public class RemindersSimpleCursorAdapter extends SimpleCursorAdapter {
         View v = view.findViewById(R.id.color);
         TextView tv = view.findViewById(R.id.text);
         tv.setText(cursor.getString(1));
-        if (cursor.getInt(2) == 1)
-        {
+        if (cursor.getInt(2) == 1) {
             v.setBackgroundColor(context.getResources().getColor(android.R.color.holo_orange_light));
-        }
-        else
-        {
+        } else {
             v.setBackgroundColor(context.getResources().getColor(android.R.color.darker_gray));
         }
     }

@@ -30,7 +30,7 @@ public class CustomDialog extends AppCompatDialogFragment {
 
     public CustomDialog(Reminder reminder) {
         super();
-        if(reminder == null) {
+        if (reminder == null) {
             mReminder = new Reminder(-1, "", 0);
             this.dialogTitle = "New Reminder";
             this.postiveButtonText = "ADD";
@@ -72,7 +72,7 @@ public class CustomDialog extends AppCompatDialogFragment {
 
         dialogTitleTextView.setText(dialogTitle);
         reminderTextEditText.setText(mReminder.getContent());
-        if(mReminder.getImportant() == 1) {
+        if (mReminder.getImportant() == 1) {
             isImportantCheckBox.setChecked(true);
         } else {
             isImportantCheckBox.setChecked(false);
@@ -87,7 +87,7 @@ public class CustomDialog extends AppCompatDialogFragment {
             @Override
             public void onClick(View v) {
                 mReminder.setContent(reminderTextEditText.getText().toString());
-                if(isImportantCheckBox.isChecked()) {
+                if (isImportantCheckBox.isChecked()) {
                     mReminder.setImportant(1);
                 } else {
                     mReminder.setImportant(0);

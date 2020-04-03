@@ -1,64 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="20dp"
-    android:background="@mipmap/background2">
+    android:orientation="vertical"
+    android:padding="20dp">
 
     <TextView
+        android:id="@+id/dialog_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Reminder"
-        android:id="@+id/dialog_title"
-        android:layout_marginLeft="5dp"
-        android:textSize="20sp"
-        android:textAllCaps="true"
         android:layout_gravity="center"
-        android:textColor="@android:color/widget_edittext_dark"/>
+        android:layout_marginLeft="5dp"
+        android:text="New Reminder"
+        android:textAllCaps="true"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20sp" />
+
     <EditText
         android:id="@+id/reminder_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minLines="3"
-        android:maxLines="3"
-        android:hint="Reminder text.."
+        android:layout_marginTop="10dp"
         android:gravity="top"
-        android:textColor="@android:color/widget_edittext_dark"
-        android:layout_marginTop="10dp"/>
+        android:hint="Reminder text.."
+        android:maxLines="3"
+        android:minLines="3"
+        android:textColor="@android:color/widget_edittext_dark" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="10dp">
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
         <CheckBox
+            android:id="@+id/is_important"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/is_important"
-            android:textAllCaps="true"/>
+            android:textAllCaps="true" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Important"
-            android:textColor="@android:color/black"/>
+            android:text="Mark as important"
+            android:textColor="@android:color/black" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="cancel"
             android:id="@+id/cancel_button"
-            />
-        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Commit"
+            android:text="cancel" />
+
+        <Button
             android:id="@+id/commit_button"
-            />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Commit" />
     </LinearLayout>
 </LinearLayout>
