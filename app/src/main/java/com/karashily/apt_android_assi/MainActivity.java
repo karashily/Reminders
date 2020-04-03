@@ -153,8 +153,10 @@ public class MainActivity extends AppCompatActivity implements CustomDialog.Cust
         dialogList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                
+                // get the current cursor on the list which point to the first element on the database
                 Cursor c = ((RemindersSimpleCursorAdapter) remindersList.getAdapter()).getCursor();
+                // move it to the position where the user touch to get a life data from the database to be able to
+                // update it or delete it.
                 c.moveToPosition(itemPosition);
                 if(position == 0) {
                     openEditDialog(new Reminder(c.getInt(0),c.getString(1),c.getInt(2)));
