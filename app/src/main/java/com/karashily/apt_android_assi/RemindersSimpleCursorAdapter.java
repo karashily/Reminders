@@ -1,19 +1,19 @@
-package com.karashily.apt_android_assi;
+//package com.karashily.apt_android_assi;
 //
 //import android.content.Context;
 //import android.database.Cursor;
-//import android.support.v4.content.ContextCompat;
-//import android.support.v4.widget.SimpleCursorAdapter;
+////import android.support.v4.content.ContextCompat;
+////import android.support.v4.widget.SimpleCursorAdapter;
 //import android.view.View;
 //import android.view.ViewGroup;
 //import android.widget.SimpleCursorAdapter;
 //
 //import androidx.core.content.ContextCompat;
-
-/**
- * Created by engMa_000 on 2017-04-03.
- */
-
+//
+///**
+// * Created by engMa_000 on 2017-04-03.
+// */
+//
 //public class RemindersSimpleCursorAdapter extends SimpleCursorAdapter {
 //
 //    public RemindersSimpleCursorAdapter(Context context, int layout, Cursor c, String[]

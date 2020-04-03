@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements CustomDialog.Cust
                     dialog.dismiss();
                 } else if(position == 1) {
                     // TODO: delete the reminder at itemPosition
-                    dbAdapter.deleteReminderById(((int) id));
+                    dbAdapter.deleteReminderById(reminders.get(itemPosition).getId());
                     dialog.dismiss();
                 }
             }
