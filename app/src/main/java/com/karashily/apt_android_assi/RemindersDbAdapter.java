@@ -53,27 +53,25 @@ public class RemindersDbAdapter {
     }
 
 
-    //TODO implement the function createReminder() which take the name as the content of the reminder and boolean important...note that the id will be created for you automatically
-    public void createReminder(String name, boolean important) {
+    //TODO implement the function createReminder() which take the name as the content of the dbAdapter and boolean important...note that the id will be created for you automatically
+    public void createReminder(String name, int important) {
       open ();
       ContentValues contentValues = new ContentValues();
       contentValues.put(COL_CONTENT,name);
       contentValues.put(COL_IMPORTANT,important);
       long result = mDb.insert(TABLE_NAME,null ,contentValues);
-      close();
     }
-    //TODO overloaded to take a reminder
+    //TODO overloaded to take a dbAdapter
     public long createReminder(Reminder reminder) {
         open ();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_CONTENT,reminder.getContent());
         contentValues.put(COL_IMPORTANT,reminder.getImportant());
         long result = mDb.insert(TABLE_NAME,null ,contentValues);
-        close();
         return result;
     }
 
-    //TODO implement the function fetchReminderById() to get a certain reminder given its id
+    //TODO implement the function fetchReminderById() to get a certain dbAdapter given its id
     public Reminder fetchReminderById(int id) {
         open();
         Cursor  res = mDb.rawQuery("select * from "+TABLE_NAME+"where _id =?"+String.valueOf(id),null);
@@ -82,7 +80,6 @@ public class RemindersDbAdapter {
         String comment = res.getString(1);
         int status = res.getInt(2);
         Reminder reminder = new Reminder(returnedId,comment,status);
-        close();
         return reminder;
     }
 
@@ -91,32 +88,28 @@ public class RemindersDbAdapter {
     public Cursor fetchAllReminders() {
         open();
         Cursor res = mDb.rawQuery("select * from "+TABLE_NAME,null);
-        close();
         return res;
 
     }
 
-    //TODO implement the function updateReminder() to update a certain reminder
+    //TODO implement the function updateReminder() to update a certain dbAdapter
     public void updateReminder(Reminder reminder) {
         open();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_CONTENT,reminder.getContent());
         contentValues.put(COL_IMPORTANT,reminder.getImportant());
         mDb.update(TABLE_NAME, contentValues, "_id = ?",new String[] { String.valueOf(reminder.getId()) });
-        close();
     }
-    //TODO implement the function deleteReminderById() to delete a certain reminder given its id
+    //TODO implement the function deleteReminderById() to delete a certain dbAdapter given its id
     public void deleteReminderById(int nId) {
         open();
         mDb.delete(TABLE_NAME, "_id = ?",new String[] {String.valueOf(nId)});
-        close();
     }
 
     //TODO implement the function deleteAllReminders() to delete all reminders
     public void deleteAllReminders() {
        open();
         mDb.execSQL("delete from "+ TABLE_NAME);
-        close();
     }
 
 

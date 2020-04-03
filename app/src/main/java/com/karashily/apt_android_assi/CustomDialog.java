@@ -16,25 +16,32 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 public class CustomDialog extends AppCompatDialogFragment {
     private EditText reminderTextEditText;
     private CheckBox isImportantCheckBox;
-    private Button deleteButton;
+    private Button cancelButton;
     private Button commitButton;
     private TextView dialogTitleTextView;
 
     private String dialogTitle;
-    private String reminderText;
-    private boolean isImportant;
     private String negativeButtonText;
     private String postiveButtonText;
+    private String type;
+    private Reminder mReminder;
 
     private CustomDialogListener listener;
 
-    public CustomDialog(String dialogTitle, String reminderText, boolean isImportant, String negativeButtonText, String postiveButtonText) {
+    public CustomDialog(Reminder reminder) {
         super();
-        this.dialogTitle = dialogTitle;
-        this.reminderText = reminderText;
-        this.isImportant = isImportant;
-        this.negativeButtonText = negativeButtonText;
-        this.postiveButtonText = postiveButtonText;
+        if(reminder == null) {
+            mReminder = new Reminder(-1, "", 0);
+            this.dialogTitle = "New Reminder";
+            this.postiveButtonText = "ADD";
+            this.type = "New";
+        } else {
+            mReminder = reminder;
+            this.dialogTitle = "Edit Reminder";
+            this.postiveButtonText = "Edit";
+            this.type = "Edit";
+        }
+        this.negativeButtonText = "Cancel";
     }
 
     @Override
@@ -59,35 +66,47 @@ public class CustomDialog extends AppCompatDialogFragment {
 
         reminderTextEditText = view.findViewById(R.id.reminder_text);
         isImportantCheckBox = view.findViewById(R.id.is_important);
-        deleteButton = view.findViewById(R.id.delete_button);
+        cancelButton = view.findViewById(R.id.cancel_button);
         commitButton = view.findViewById(R.id.commit_button);
         dialogTitleTextView = view.findViewById(R.id.dialog_title);
 
         dialogTitleTextView.setText(dialogTitle);
-        reminderTextEditText.setText(reminderText);
-        isImportantCheckBox.setChecked(isImportant);
-        deleteButton.setText(negativeButtonText);
+        reminderTextEditText.setText(mReminder.getContent());
+        if(mReminder.getImportant() == 1) {
+            isImportantCheckBox.setChecked(true);
+        } else {
+            isImportantCheckBox.setChecked(false);
+        }
+        cancelButton.setText(negativeButtonText);
         commitButton.setText(postiveButtonText);
+
+
+        final AlertDialog dialog = builder.create();
 
         commitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onCommit(reminderText, isImportant);
+                mReminder.setContent(reminderTextEditText.getText().toString());
+                if(isImportantCheckBox.isChecked()) {
+                    mReminder.setImportant(1);
+                } else {
+                    mReminder.setImportant(0);
+                }
+                listener.onCommit(type, mReminder);
+                dialog.dismiss();
             }
         });
 
-        deleteButton.setOnClickListener(new View.OnClickListener() {
+        cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onDelete();
+                dialog.dismiss();
             }
         });
-
-        return builder.create();
+        return dialog;
     }
 
     public interface CustomDialogListener {
-        void onCommit(String reminderText, boolean isImportant);
-        void onDelete();
+        void onCommit(String type, Reminder reminder);
     }
 }
